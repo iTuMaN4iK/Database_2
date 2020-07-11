@@ -18,7 +18,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ main.cpp database.cpp date.cpp condition_parser.cpp token.cpp node.cpp --std=c++17",
+            "command": "g++ main.cpp database.cpp date.cpp condition_parser.cpp token.cpp node.cpp --std=c++17 -g3",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

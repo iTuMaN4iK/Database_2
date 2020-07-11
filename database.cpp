@@ -2,13 +2,14 @@
 #include <algorithm>
 #include <iterator>
 void Database::Add(const Date &date, const std::string &event) {
-  if (events.count(date) == 0) {
-    events[date].push_back(event);
+  if (eventsLast.count(date) == 0) {
+    eventsLast[date].push_back(event);
+    events[date].insert(event);
     return;
   }
-  auto f = std::find(events.at(date).begin(), events.at(date).end(), event);
-  if (f == events.at(date).end()) {
-    events[date].push_back(event);
+  if (events.at(date).count(event) == 0) {
+    eventsLast[date].push_back(event);
+    events[date].insert(event);
   }
 };
 
@@ -39,9 +40,8 @@ void Database::Find(const Date &date) const {
 };
 
 void Database::Print(std::ostream &out) const {
-
-  for (const auto &i : events) {
-    for (const auto &j : events.at(i.first)) {
+  for (const auto &i : eventsLast) {
+    for (const auto &j : eventsLast.at(i.first)) {
       out << i.first << " " << j << std::endl;
     }
   }
@@ -50,20 +50,30 @@ void Database::Print(std::ostream &out) const {
 int Database::RemoveIf(
     const std::function<bool(const Date &, const std::string &)> predicate) {
   int count = 0;
-  auto itmap = events.begin();
-  while (itmap != events.end()) {
-    auto it = std::stable_partition(itmap->second.begin(), itmap->second.end(),
-                                    [&predicate, itmap](const auto &iset) {
-                                      return !predicate(itmap->first, iset);
+
+  auto mit = eventsLast.begin();
+  while (mit != eventsLast.end()) {
+    bool bErase = false;
+    auto it = std::stable_partition(mit->second.begin(), mit->second.end(),
+                                    [&predicate, mit](const auto &iset) {
+                                      return !predicate(mit->first, iset);
                                     });
-    if (it != itmap->second.end()) {
-      count += std::distance(it, itmap->second.end());
-      itmap->second.erase(it, itmap->second.end());
+    if (it != mit->second.end()) {
+      bErase = true;
+      count += std::distance(it, mit->second.end());
+      mit->second.erase(it, mit->second.end());
     }
-    if (itmap->second.empty()) {
-      itmap = events.erase(itmap);
+    if (bErase) {
+      events.at(mit->first).clear();
+      std::copy(
+          mit->second.begin(), mit->second.end(),
+          std::inserter(events.at(mit->first), events.at(mit->first).begin()));
+    }
+    if (mit->second.empty()) {
+      events.erase(mit->first);
+      mit = eventsLast.erase(mit);
     } else {
-      itmap++;
+      mit++;
     }
   }
 
@@ -90,8 +100,8 @@ std::vector<std::string> Database::FindIf(
 }
 
 std::string Database::Last(const Date &date) const {
-  auto it = events.upper_bound(date);
-  if (it == events.begin())
+  auto it = eventsLast.upper_bound(date);
+  if (it == eventsLast.begin())
     throw std::invalid_argument("Last not found");
   it--;
   return {it->first.getDate() + " " + it->second.back()};

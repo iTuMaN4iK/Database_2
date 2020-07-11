@@ -296,7 +296,9 @@ void TestDbRemoveIf() {
     db.Add({2017, 1, 1}, "new year");
     db.Add({2017, 1, 7}, "xmas");
     AssertEqual(0, DoRemove(db, R"(event == "something")"), "Remove nothing");
+
     AssertEqual(1, DoRemove(db, R"(date == "2017-01-01")"), "Remove by date");
+
     ostringstream out;
     db.Print(out);
     AssertEqual("2017-01-07 xmas\n", out.str(), "Remove by date, left");
