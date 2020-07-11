@@ -23,17 +23,17 @@ EventComparisonNode::EventComparisonNode(Comparison cmp,
 bool EventComparisonNode::Evaluate(const Date &date,
                                    const std::string &event) const {
   if (cmp_ == Comparison::Less) {
-    return value_ < event;
+    return event < value_;
   } else if (cmp_ == Comparison::LessOrEqual) {
-    return value_ <= event;
+    return event <= value_;
   } else if (cmp_ == Comparison::Greater) {
-    return value_ > event;
+    return event > value_;
   } else if (cmp_ == Comparison::GreaterOrEqual) {
-    return value_ >= event;
+    return event >= value_;
   } else if (cmp_ == Comparison::Equal) {
-    return value_ == event;
+    return event == value_;
   } else if (cmp_ == Comparison::NotEqual) {
-    return value_ != event;
+    return event != value_;
   }
 }
 bool EmptyNode::Evaluate(const Date &date, const std::string &event) const {

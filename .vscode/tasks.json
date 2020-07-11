@@ -6,12 +6,24 @@
         {
             "label": "tar",
             "type": "shell",
-            "command": "tar -czvf database.tar.gz condition_parser.cpp condition_parser.h database.cpp database.h date.cpp date.h main.cpp node.cpp node.h test_runner.h token.cpp token.h"
+            "command": "tar -czvf database.tar.gz condition_parser.cpp condition_parser.h database.cpp database.h date.cpp date.h main.cpp node.cpp node.h test_runner.h token.cpp token.h",
+            "problemMatcher": []
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "./a.out<in.txt",
+            "problemMatcher": []
         },
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ main.cpp database.cpp date.cpp condition_parser.cpp token.cpp node.cpp --std=c++17"
+            "command": "g++ main.cpp database.cpp date.cpp condition_parser.cpp token.cpp node.cpp --std=c++17",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

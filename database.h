@@ -20,6 +20,5 @@ public:
   std::string Last(const Date &date) const;
 
 private:
-  std::map<Date, std::set<std::string>> events;
-  std::map<Date, std::string> eventsLast;
+  std::map<Date, std::vector<std::string>> events;
 };
