@@ -1,0 +1,17 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "tar",
+            "type": "shell",
+            "command": "tar -czvf database.tar.gz condition_parser.cpp condition_parser.h database.cpp database.h date.cpp date.h main.cpp node.cpp node.h test_runner.h token.cpp token.h"
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "g++ main.cpp database.cpp date.cpp condition_parser.cpp token.cpp node.cpp --std=c++17"
+        }
+    ]
+}
