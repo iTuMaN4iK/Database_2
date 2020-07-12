@@ -7,9 +7,9 @@ void Database::Add(const Date &date, const std::string &event) {
     events[date].insert(event);
     return;
   }
-  if (events.at(date).count(event) == 0) {
+  auto res = events.at(date).insert(event);
+  if (res.second) {
     eventsLast[date].push_back(event);
-    events[date].insert(event);
   }
 };
 
@@ -84,7 +84,7 @@ std::vector<std::string> Database::FindIf(
     const std::function<bool(const Date &, const std::string &)> predicate)
     const {
   std::vector<std::string> entries;
-  for (const auto &e : events) {
+  for (const auto &e : eventsLast) {
     auto it = e.second.begin();
     while (it != e.second.end()) {
       it = std::find_if(it, e.second.end(), [&predicate, e](const auto &iset) {

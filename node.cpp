@@ -16,6 +16,7 @@ bool DateComparisonNode::Evaluate(const Date &date,
   } else if (cmp_ == Comparison::NotEqual) {
     return date != date_;
   }
+  return false; // make compiler happy
 }
 EventComparisonNode::EventComparisonNode(Comparison cmp,
                                          const std::string &value)
